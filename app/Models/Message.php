@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    //
+    //defining relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
