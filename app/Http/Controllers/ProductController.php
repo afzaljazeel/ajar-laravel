@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -24,4 +25,22 @@ class ProductController extends Controller
 
         return response()->json($product, 200);
     }
+
+    // Product Filtering
+    public function shopIndex(Request $request)
+    {
+        $categories = Category::with('children')->whereNull('parent_id')->get();
+
+        $query = Product::with('category');
+
+        if ($request->has('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        $products = $query->latest()->get();
+
+        return view('shop', compact('products', 'categories'));
+    }
+
+
 }

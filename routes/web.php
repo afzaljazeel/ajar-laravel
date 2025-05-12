@@ -15,6 +15,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/contact', [MessageController::class, 'store'])->name('contact.send');
+Route::get('/shop', [ProductController::class, 'shopIndex'])->name('shop');
+
 
 // Authenticated user routes
 Route::middleware(['auth'])->group(function () {
