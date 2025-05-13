@@ -17,30 +17,25 @@ class ProductController extends Controller
     // GET /api/products/{id}
     public function show($id)
     {
-        $product = Product::with('category')->find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        return response()->json($product, 200);
+        $product = Product::with(['category', 'images'])->findOrFail($id);
+        return view('shop.show', compact('product'));
     }
+
 
     // Product Filtering
     public function shopIndex(Request $request)
     {
-        $categories = Category::with('children')->whereNull('parent_id')->get();
-
-        $query = Product::with('category');
+        $query = Product::with(['category', 'images'])
+                        ->where('status', true);
 
         if ($request->has('category')) {
             $query->where('category_id', $request->category);
         }
 
-        $products = $query->latest()->get();
+        $products = $query->latest()->paginate(12);
+        $categories = Category::with('children')->whereNull('parent_id')->get();
 
-        return view('shop', compact('products', 'categories'));
+        return view('shop.index', compact('products', 'categories'));
+
     }
-
-
 }
