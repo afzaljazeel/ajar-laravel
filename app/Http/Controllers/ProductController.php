@@ -14,15 +14,22 @@ class ProductController extends Controller
         return response()->json(Product::with('category')->get(), 200);
     }
 
-    // GET /api/products/{id}
+    // GET /products/{id}
     public function show($id)
     {
         $product = Product::with(['category', 'images'])->findOrFail($id);
-        return view('shop.show', compact('product'));
+
+        // Fetch related products from the same category (excluding this product)
+        $relatedProducts = Product::with('images')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+
+        return view('shop.show', compact('product', 'relatedProducts'));
     }
 
-
-    // Product Filtering
+    // GET /shop (with optional filtering)
     public function shopIndex(Request $request)
     {
         $query = Product::with(['category', 'images'])
@@ -36,6 +43,5 @@ class ProductController extends Controller
         $categories = Category::with('children')->whereNull('parent_id')->get();
 
         return view('shop.index', compact('products', 'categories'));
-
     }
 }

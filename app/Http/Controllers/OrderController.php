@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use Illuminate\Http\Request;
+use App\Models\Cart;
+use App\Models\Product;
+
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -12,43 +15,58 @@ class OrderController extends Controller
     // GET /api/orders
     public function index()
     {
-        $orders = Order::with('items.product')->where('user_id', Auth::id())->get();
-        return response()->json($orders, 200);
+        $user = auth()->user();
+
+        $orders = $user->orders()
+            ->with('items.product.images')
+            ->latest()
+            ->get();
+
+        return view('orders.index', compact('orders'));
     }
-
-    // POST /api/orders
-    public function store(Request $request)
+    // 
+    public function store()
     {
-        $validated = $request->validate([
-            'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
-        ]);
+        $user = Auth::user();
 
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'status' => 'pending',
-            'total' => 0, // calculate later
-        ]);
+        $cartItems = Cart::with('product')->where('user_id', $user->id)->get();
+
+        if ($cartItems->isEmpty()) {
+            return back()->with('error', 'Your cart is empty.');
+        }
 
         $total = 0;
 
-        foreach ($validated['items'] as $item) {
-            $product = \App\Models\Product::find($item['product_id']);
-            $subtotal = $product->price * $item['quantity'];
+        // Pre-calculate total
+        foreach ($cartItems as $item) {
+            $price = $item->product->sale_price ?? $item->product->price;
+            $total += $price * $item->quantity;
+        }
+
+        // Create the order
+        $order = Order::create([
+            'user_id' => $user->id,
+            'status' => 'pending',
+            'total' => $total,
+        ]);
+
+        // Add order items
+        foreach ($cartItems as $item) {
+            $price = $item->product->sale_price ?? $item->product->price;
 
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $product->id,
-                'quantity' => $item['quantity'],
-                'price' => $product->price,
+                'product_id' => $item->product_id,
+                'size' => $item->size,
+                'variant' => $item->variant,
+                'quantity' => $item->quantity,
+                'price' => $price,
             ]);
-
-            $total += $subtotal;
         }
 
-        $order->update(['total' => $total]);
+        // Clear cart
+        Cart::where('user_id', $user->id)->delete();
 
-        return response()->json(['message' => 'Order placed successfully'], 201);
+        return redirect()->route('orders')->with('success', 'Your order has been placed!');
     }
 }

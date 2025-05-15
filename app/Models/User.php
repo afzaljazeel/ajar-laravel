@@ -71,14 +71,14 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function cart()
+    public function cartItems()
     {
         return $this->hasMany(Cart::class);
     }
 
     public function wishlist()
     {
-        return $this->hasMany(Wishlist::class);
+         return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
     }
 
     public function reviews()

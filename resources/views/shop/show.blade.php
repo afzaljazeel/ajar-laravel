@@ -3,9 +3,18 @@
 @section('title', $product->name)
 
 @section('content')
+
+{{-- Breadcrumb --}}
+<div class="max-w-6xl mx-auto px-4 mt-6 text-sm text-gray-600">
+    <a href="{{ route('home') }}" class="hover:underline">Home</a> >
+    <a href="{{ route('shop') }}" class="hover:underline">Shop</a> >
+    <span class="text-gray-900">{{ $product->name }}</span>
+</div>
+
+{{-- Product Display Section --}}
 <div class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
 
-    {{-- Gallery --}}
+    {{-- Image Gallery --}}
     <div class="space-y-4">
         <div class="w-full aspect-[3/4] overflow-hidden rounded border">
             <img id="main-image"
@@ -23,21 +32,19 @@
         </div>
     </div>
 
-    {{-- Details --}}
+    {{-- Product Info --}}
     <div>
         <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $product->name }}</h1>
         <p class="text-gray-600 text-sm mb-1">Category: {{ $product->category->name ?? '-' }}</p>
 
-        {{-- Pricing --}}
+        {{-- Price --}}
         @if ($product->sale_price)
             <p class="text-2xl font-semibold text-gray-900 mt-4">
                 <span class="line-through text-gray-400 mr-2">${{ number_format($product->price, 2) }}</span>
                 ${{ number_format($product->sale_price, 2) }}
             </p>
         @else
-            <p class="text-2xl font-semibold text-gray-900 mt-4">
-                ${{ number_format($product->price, 2) }}
-            </p>
+            <p class="text-2xl font-semibold text-gray-900 mt-4">${{ number_format($product->price, 2) }}</p>
         @endif
 
         {{-- Description --}}
@@ -120,7 +127,26 @@
     </div>
 </div>
 
-{{-- Script for size/variant selection --}}
+{{-- Related Products Section --}}
+@if ($relatedProducts->count())
+    <div class="max-w-6xl mx-auto px-4 pb-16">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Related Products</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            @foreach ($relatedProducts as $related)
+                <a href="{{ route('shop.show', $related->id) }}" class="block group">
+                    <div class="aspect-[3/4] bg-gray-100 rounded overflow-hidden">
+                        <img src="{{ asset('storage/' . ($related->images->first()->image_path ?? 'placeholder.jpg')) }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition">
+                    </div>
+                    <h3 class="mt-2 text-sm text-gray-700 truncate">{{ $related->name }}</h3>
+                    <p class="text-sm font-semibold text-gray-900">${{ number_format($related->sale_price ?? $related->price, 2) }}</p>
+                </a>
+            @endforeach
+        </div>
+    </div>
+@endif
+
+{{-- JS for size/variant selection --}}
 <script>
     function selectOption(type, value, element) {
         document.querySelectorAll(`#${type}-options button`).forEach(btn => {
@@ -132,4 +158,5 @@
         document.getElementById(`selected-${type}`).value = value;
     }
 </script>
+
 @endsection

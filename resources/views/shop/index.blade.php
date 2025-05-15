@@ -3,7 +3,7 @@
 @section('title', 'Shop')
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="max-w-8xl mx-auto px-4 py-10">
         {{-- Mobile Dropdown Button --}}
         <div class="lg:hidden mb-4">
             <button onclick="toggleSidebar()"

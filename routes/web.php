@@ -16,24 +16,31 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
 
-// ----------------------
-// Public Routes
-// ----------------------
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/shop', [ProductController::class, 'shopIndex'])->name('shop');
+    // ----------------------
+    // Public Routes
+    // ----------------------
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+   
+    Route::get('/shop', [ProductController::class, 'shopIndex'])->name('shop');
+    // Product Detail
 
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-Route::post('/contact', [MessageController::class, 'store'])->name('contact.send');
+    Route::get('/shop/{id}', [ProductController::class, 'show'])->name('shop.show');
+    Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+    Route::post('/contact', [MessageController::class, 'store'])->name('contact.send');
 
-// ----------------------
-// Authenticated User Routes
-// ----------------------
-Route::middleware(['auth'])->group(function () {
+    // ----------------------
+    // Authenticated User Routes
+    // ----------------------
+    Route::middleware(['auth'])->group(function () {
 
     // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+    Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
 
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
