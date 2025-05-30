@@ -12,8 +12,12 @@
                 <div class="flex flex-col sm:flex-row items-center gap-4 p-4 border rounded shadow-sm bg-white">
                     {{-- Product Image --}}
                     <div class="w-24 h-32 bg-gray-100 overflow-hidden rounded">
-                        <img src="{{ asset('storage/' . ($item->product->images->first()->image_path ?? 'placeholder.jpg')) }}"
-                             alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                       <img src="{{ asset('storage/' . 
+                        ($item->product->coverImage->image_path ?? 
+                        $item->product->images->first()->image_path ?? 
+                        'placeholder.jpg')) }}"
+                        alt="{{ $item->product->name }}" 
+                        class="w-full h-full object-cover">
                     </div>
 
                     {{-- Product Info --}}
@@ -58,17 +62,17 @@
             @endforeach
         </div>
 
+
         {{-- Total & Checkout --}}
-        <div class="mt-8 p-4 border-t text-right">
+        <div class="mt-8 p-4 border-t text-right space-y-2">
+            <p class="text-sm text-green-600 font-medium">🎉 Free delivery on all orders!</p>
             <p class="text-lg font-semibold text-gray-800">Total: ${{ number_format($total, 2) }}</p>
-            <form action="{{ route('orders.place') }}" method="POST" class="mt-4 inline-block">
-                @csrf
-                <button type="submit"
-                        class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-black transition">
-                    Place Order
-                </button>
-            </form>
+            <a href="{{ route('checkout') }}"
+            class="inline-block mt-2 bg-gray-900 text-white px-6 py-2 rounded hover:bg-black transition">
+                Proceed to Checkout
+            </a>
         </div>
+
 
     @else
         {{-- Empty Cart --}}

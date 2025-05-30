@@ -30,18 +30,34 @@ class ProductController extends Controller
     }
 
     // GET /shop (with optional filtering)
-    public function shopIndex(Request $request)
-    {
-        $query = Product::with(['category', 'images'])
-                        ->where('status', true);
+        public function shopIndex(Request $request)
+        {
+            $query = Product::with(['category', 'images'])->where('status', true);
 
-        if ($request->has('category')) {
-            $query->where('category_id', $request->category);
+            if ($request->has('category')) {
+                $value = $request->get('category');
+
+                // Detect if it's a numeric category_id
+                if (is_numeric($value)) {
+                    $query->where('category_id', $value);
+                } else {
+                    $category = \App\Models\Category::where('slug', $value)->with('children')->first();
+
+                    if ($category) {
+                        $categoryIds = $category->children->pluck('id')->toArray();
+                        $categoryIds[] = $category->id;
+
+                        $query->whereIn('category_id', $categoryIds);
+                    }
+                }
+            }
+
+            $products = $query->latest()->paginate(12);
+            $categories = \App\Models\Category::with('children')->whereNull('parent_id')->get();
+
+            return view('shop.index', compact('products', 'categories'));
         }
 
-        $products = $query->latest()->paginate(12);
-        $categories = Category::with('children')->whereNull('parent_id')->get();
 
-        return view('shop.index', compact('products', 'categories'));
-    }
+
 }

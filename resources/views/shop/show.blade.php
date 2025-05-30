@@ -4,6 +4,8 @@
 
 @section('content')
 
+
+
 {{-- Breadcrumb --}}
 <div class="max-w-6xl mx-auto px-4 mt-6 text-sm text-gray-600">
     <a href="{{ route('home') }}" class="hover:underline">Home</a> >
@@ -11,131 +13,122 @@
     <span class="text-gray-900">{{ $product->name }}</span>
 </div>
 
-{{-- Product Display Section --}}
+{{-- Product Section --}}
 <div class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
 
-    {{-- Image Gallery --}}
-    <div class="space-y-4">
-        <div class="w-full aspect-[3/4] overflow-hidden rounded border">
-            <img id="main-image"
-                 src="{{ asset('storage/' . ($product->images->first()->image_path ?? 'placeholder.jpg')) }}"
-                 alt="{{ $product->name }}"
-                 class="w-full h-full object-cover object-center transition duration-300">
-        </div>
-
-        <div class="flex gap-3 overflow-x-auto">
+    {{-- Gallery --}}
+    <div class="flex gap-6">
+        {{-- Thumbnails --}}
+        <div class="flex flex-col gap-3 w-20 overflow-y-auto">
             @foreach ($product->images as $image)
                 <img src="{{ asset('storage/' . $image->image_path) }}"
-                     class="h-20 w-28 object-cover rounded border cursor-pointer hover:ring-2 ring-gray-800 transition"
-                     onclick="document.getElementById('main-image').src=this.src;">
+                     onclick="document.getElementById('main-image').src=this.src"
+                     class="rounded border cursor-pointer hover:ring-2 ring-black transition object-cover h-20 w-20">
             @endforeach
+        </div>
+
+        {{-- Main Image --}}
+        <div class="flex-1 border rounded aspect-[4/5] overflow-hidden">
+            <img id="main-image"
+                 src="{{ asset('storage/' . ($product->coverImage->image_path ?? $product->images->first()->image_path ?? 'placeholder.jpg')) }}"
+                 class="w-full h-full object-cover object-center transition">
         </div>
     </div>
 
-    {{-- Product Info --}}
-    <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $product->name }}</h1>
-        <p class="text-gray-600 text-sm mb-1">Category: {{ $product->category->name ?? '-' }}</p>
+    {{-- Info --}}
+    <div class="space-y-4">
+        <h1 class="text-3xl font-bold text-gray-900">{{ $product->name }}</h1>
+        <p class="text-sm text-gray-600">Category: {{ $product->category->name ?? '-' }}</p>
 
         {{-- Price --}}
-        @if ($product->sale_price)
-            <p class="text-2xl font-semibold text-gray-900 mt-4">
-                <span class="line-through text-gray-400 mr-2">${{ number_format($product->price, 2) }}</span>
-                ${{ number_format($product->sale_price, 2) }}
-            </p>
-        @else
-            <p class="text-2xl font-semibold text-gray-900 mt-4">${{ number_format($product->price, 2) }}</p>
-        @endif
-
-        {{-- Description --}}
-        <div class="mt-6">
-            <p class="text-gray-700 text-sm leading-relaxed">{{ $product->description }}</p>
+        <div>
+            @if ($product->sale_price)
+                <span class="text-xl font-semibold text-red-600">${{ number_format($product->sale_price, 2) }}</span>
+                <span class="line-through text-gray-400 ml-2">${{ number_format($product->price, 2) }}</span>
+            @else
+                <span class="text-xl font-semibold text-gray-900">${{ number_format($product->price, 2) }}</span>
+            @endif
         </div>
 
+        {{-- Description --}}
+        <p class="text-sm text-gray-700">{{ $product->description }}</p>
+
         {{-- Sizes --}}
-        @if ($product->sizes)
-            <div class="mt-6">
-                <h4 class="text-sm font-semibold text-gray-700 mb-1">Choose Size:</h4>
-                <div id="size-options" class="flex flex-wrap gap-2">
-                    @foreach ($product->sizes as $size)
-                        <button type="button"
-                                class="px-3 py-1 border rounded text-sm bg-white text-gray-700 hover:bg-gray-100 transition"
-                                onclick="selectOption('size', '{{ $size }}', this)">
-                            {{ $size }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        @endif
+                @if ($product->sizes)
+                    <div>
+                        <h4 class="text-sm font-semibold mb-1">Choose Size:</h4>
+                        <div id="size-options" class="flex gap-2 flex-wrap">
+                            @foreach ($product->sizes as $size)
+                                <button type="button"
+                                        class="px-3 py-1 border rounded text-sm bg-white text-gray-700 hover:bg-gray-100 transition"
+                                        onclick="selectOption('size', '{{ $size }}', this)">
+                                    {{ $size }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
-        {{-- Variants --}}
-        @if ($product->variants)
-            <div class="mt-4">
-                <h4 class="text-sm font-semibold text-gray-700 mb-1">Choose Variant:</h4>
-                <div id="variant-options" class="flex flex-wrap gap-2">
-                    @foreach ($product->variants as $variant)
-                        <button type="button"
-                                class="px-3 py-1 border rounded text-sm bg-white text-gray-700 hover:bg-gray-100 transition"
-                                onclick="selectOption('variant', '{{ $variant }}', this)">
-                            {{ $variant }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        @endif
+                {{-- Variants --}}
+                @if ($product->variants)
+                    <div>
+                        <h4 class="text-sm font-semibold mb-1">Choose Variant:</h4>
+                        <div id="variant-options" class="flex gap-2 flex-wrap">
+                            @foreach ($product->variants as $variant)
+                                <button type="button"
+                                        class="px-3 py-1 border rounded text-sm bg-white text-gray-700 hover:bg-gray-100 transition"
+                                        onclick="selectOption('variant', '{{ $variant }}', this)">
+                                    {{ $variant }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
-        {{-- Cart + Favorite --}}
-        @auth
-            @if (!auth()->user()->is_admin)
+        
+         {{-- Wishlist Favorite Button --}}
+        @php
+            $isFavorited = auth()->user()->wishlist->contains($product->id);
+        @endphp
+
+        <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+            @csrf
+            <button type="submit"
+                    class="w-12 h-10 border rounded flex items-center justify-center ml-2 transition hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $isFavorited ? 'red' : 'none' }}"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6 {{ $isFavorited ? 'text-red-600' : 'text-gray-500' }}">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.752 6.707c0 4.266-6.285 8.584-9.064 10.648a1.13 1.13 0 01-1.376 0C8.285 15.291 2 10.973 2 6.707 2 4.237 4.19 2 6.64 2c1.586 0 3.018.861 3.86 2.17A4.28 4.28 0 0114.36 2c2.45 0 4.64 2.237 4.64 4.707z" />
+                </svg>
+            </button>
+        </form>
+
                 {{-- Add to Cart --}}
-                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-6">
-                    @csrf
-                    <input type="hidden" name="size" id="selected-size">
-                    <input type="hidden" name="variant" id="selected-variant">
+        <form action="{{ route('cart.add', $product->id) }}" method="POST" onsubmit="return validateCartSelection()" class="flex-1">
+            @csrf
+            <input type="hidden" name="size" id="selected-size">
+            <input type="hidden" name="variant" id="selected-variant">
+            <button type="submit"
+                    class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition text-sm">
+                Add to Cart
+            </button>
+        </form>
 
-                    <button type="submit"
-                            class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-black transition w-full">
-                        Add to Cart
-                    </button>
-                </form>
+       
 
-                {{-- Favorite --}}
-                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST" class="mt-3">
-                    @csrf
-                    <button type="submit"
-                            class="w-full text-center px-6 py-2 border rounded text-sm text-gray-700 hover:bg-gray-100 transition">
-                        ❤️ Add to Favorites
-                    </button>
-                </form>
-            @else
-                <p class="text-red-600 text-sm mt-6 font-semibold">
-                    Admins cannot add to cart or favorite items.
-                </p>
-            @endif
-        @else
-            <div class="mt-6 space-y-3">
-                <a href="{{ route('login') }}"
-                   class="block bg-gray-800 text-white text-center px-6 py-2 rounded hover:bg-black transition">
-                    Login to Add to Cart
-                </a>
-                <a href="{{ route('register') }}"
-                   class="block text-center border px-6 py-2 rounded text-gray-700 hover:bg-gray-100 transition">
-                    Register Now
-                </a>
-            </div>
-        @endauth
     </div>
 </div>
 
-{{-- Related Products Section --}}
+{{-- Related Products --}}
 @if ($relatedProducts->count())
     <div class="max-w-6xl mx-auto px-4 pb-16">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Related Products</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">You may also like</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
             @foreach ($relatedProducts as $related)
                 <a href="{{ route('shop.show', $related->id) }}" class="block group">
-                    <div class="aspect-[3/4] bg-gray-100 rounded overflow-hidden">
-                        <img src="{{ asset('storage/' . ($related->images->first()->image_path ?? 'placeholder.jpg')) }}"
+                    <div class="aspect-[4/5] bg-gray-100 rounded overflow-hidden">
+                        <img src="{{ asset('storage/' . ($related->coverImage->image_path ?? $related->images->first()->image_path ?? 'placeholder.jpg')) }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition">
                     </div>
                     <h3 class="mt-2 text-sm text-gray-700 truncate">{{ $related->name }}</h3>
@@ -146,16 +139,28 @@
     </div>
 @endif
 
-{{-- JS for size/variant selection --}}
+{{-- JS --}}
 <script>
-    function selectOption(type, value, element) {
+        function selectOption(type, value, element) {
         document.querySelectorAll(`#${type}-options button`).forEach(btn => {
-            btn.classList.remove('bg-gray-900', 'text-white');
+            btn.classList.remove('bg-black', 'text-white');
             btn.classList.add('bg-white', 'text-gray-700');
         });
         element.classList.remove('bg-white', 'text-gray-700');
-        element.classList.add('bg-gray-900', 'text-white');
+        element.classList.add('bg-black', 'text-white');
         document.getElementById(`selected-${type}`).value = value;
+    }
+
+    function validateCartSelection() {
+        const size = document.getElementById('selected-size')?.value;
+        const variant = document.getElementById('selected-variant')?.value;
+        const variantExists = document.getElementById('variant-options') !== null;
+
+        if (!size || (variantExists && !variant)) {
+            alert('Please select all required options before adding to cart.');
+            return false;
+        }
+        return true;
     }
 </script>
 

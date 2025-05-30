@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Admin
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Middleware\AdminMiddleware;
 
@@ -15,6 +16,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
+
 
     // ----------------------
     // Public Routes
@@ -45,6 +47,11 @@ use App\Http\Controllers\ProfileController;
     // Wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
     Route::post('/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    
+    //checkout
+    Route::middleware('auth')->get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+
 
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
@@ -52,29 +59,49 @@ use App\Http\Controllers\ProfileController;
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/upload', [ProfileController::class, 'upload'])->name('profile.upload');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/update/{field}', [ProfileController::class, 'updateField'])->name('profile.updateField');
+    Route::middleware('auth')->get('/orders/completed', [OrderController::class, 'completed'])->name('orders.completed');
+
+
+
+
+
+
 
     // ----------------------
     // Admin Routes
     // ----------------------
-    Route::middleware([AdminMiddleware::class])
+
+    Route::middleware(['auth', AdminMiddleware::class])
         ->prefix('admin')
+        ->name('admin.')
         ->group(function () {
 
             // Admin Dashboard
-            Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+            Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+            // Admin Profile 
+            Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
             // Product CRUD
             Route::resource('products', AdminProductController::class)->names([
-                'index'   => 'admin.products.index',
-                'create'  => 'admin.products.create',
-                'store'   => 'admin.products.store',
-                'edit'    => 'admin.products.edit',
-                'update'  => 'admin.products.update',
-                'destroy' => 'admin.products.destroy',
+                'index'   => 'products.index',
+                'create'  => 'products.create',
+                'store'   => 'products.store',
+                'edit'    => 'products.edit',
+                'update'  => 'products.update',
+                'destroy' => 'products.destroy',
             ]);
 
-            // Product image & status management
-            Route::delete('/products/image/{id}', [AdminProductController::class, 'deleteImage'])->name('admin.products.image.delete');
-            Route::patch('/products/{id}/toggle', [AdminProductController::class, 'toggleStatus'])->name('admin.products.toggle');
+            // Product image & status
+            Route::delete('/products/image/{id}', [AdminProductController::class, 'deleteImage'])->name('products.image.delete');
+            Route::patch('/products/{id}/toggle', [AdminProductController::class, 'toggleStatus'])->name('products.toggle');
+
+            //user management
+            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
         });
+
+
 });

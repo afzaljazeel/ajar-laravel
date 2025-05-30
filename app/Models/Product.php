@@ -40,4 +40,10 @@ class Product extends Model
         return $this->hasMany(\App\Models\ProductImage::class);
     }
 
+    public function coverImage()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_cover', true);
+    }
+
+
 }

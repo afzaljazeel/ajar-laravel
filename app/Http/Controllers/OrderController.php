@@ -25,6 +25,8 @@ class OrderController extends Controller
         return view('orders.index', compact('orders'));
     }
     // 
+
+
     public function store()
     {
         $user = Auth::user();
@@ -69,4 +71,34 @@ class OrderController extends Controller
 
         return redirect()->route('orders')->with('success', 'Your order has been placed!');
     }
+
+    //checkout
+    public function checkout()
+    {
+        $user = Auth::user();
+        $cartItems = $user->cart()->with('product')->get();
+
+        $total = 0;
+
+        foreach ($cartItems as $item) {
+            $price = $item->product->sale_price ?? $item->product->price;
+            $total += $price * $item->quantity;
+        }
+
+        return view('checkout', compact('cartItems', 'total'));
+    }
+
+    public function completed()
+    {
+        $orders = auth()->user()
+            ->orders()
+            ->with(['items.product.coverImage', 'items.product.images'])
+            ->where('status', 'dispatched') // or use 'completed' depending on your logic
+            ->orderByDesc('updated_at')
+            ->get();
+
+        return view('orders.completed', compact('orders'));
+    }
+
+
 }

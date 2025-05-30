@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-
+    //create a cart entry using Cart::create([...]).
     protected $fillable = [
         'user_id',
         'product_id',
