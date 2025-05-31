@@ -31,8 +31,8 @@
                             $price = $item->product->sale_price ?? $item->product->price;
                             $subtotal = $price * $item->quantity;
                         @endphp
-                        <p class="mt-1 text-sm font-medium text-gray-900">Price: ${{ number_format($price, 2) }}</p>
-                        <p class="text-sm text-gray-700">Subtotal: ${{ number_format($subtotal, 2) }}</p>
+                        <p class="mt-1 text-sm font-medium text-gray-900">Price: LKR{{ number_format($price, 2) }}</p>
+                        <p class="text-sm text-gray-700">Subtotal: LKR{{ number_format($subtotal, 2) }}</p>
                     </div>
 
                     {{-- Quantity Update --}}
@@ -66,7 +66,7 @@
         {{-- Total & Checkout --}}
         <div class="mt-8 p-4 border-t text-right space-y-2">
             <p class="text-sm text-green-600 font-medium">🎉 Free delivery on all orders!</p>
-            <p class="text-lg font-semibold text-gray-800">Total: ${{ number_format($total, 2) }}</p>
+            <p class="text-lg font-semibold text-gray-800">Total: LKR{{ number_format($total, 2) }}</p>
             <a href="{{ route('checkout') }}"
             class="inline-block mt-2 bg-gray-900 text-white px-6 py-2 rounded hover:bg-black transition">
                 Proceed to Checkout

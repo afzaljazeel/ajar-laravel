@@ -100,5 +100,11 @@ class OrderController extends Controller
         return view('orders.completed', compact('orders'));
     }
 
+    public function cancelled()
+    {
+        $orders = auth()->user()->orders()->where('status', 'cancelled')->latest()->get();
+        return view('orders.cancelled', compact('orders'));
+    }
+
 
 }

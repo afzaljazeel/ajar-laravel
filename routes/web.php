@@ -63,6 +63,8 @@ use App\Http\Controllers\ProfileController;
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/update/{field}', [ProfileController::class, 'updateField'])->name('profile.updateField');
     Route::middleware('auth')->get('/orders/completed', [OrderController::class, 'completed'])->name('orders.completed');
+    Route::get('/orders/cancelled', [OrderController::class, 'cancelled'])->name('orders.cancelled');
+
 
 
 
@@ -99,8 +101,27 @@ use App\Http\Controllers\ProfileController;
             Route::patch('/products/{id}/toggle', [AdminProductController::class, 'toggleStatus'])->name('products.toggle');
 
             //user management
-            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
-            Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+            Route::resource('users', AdminUserController::class)->names([
+                'index'   => 'users.index',
+                'create'  => 'users.create',
+                'store'   => 'users.store',
+                'edit'    => 'users.edit',
+                'update'  => 'users.update',
+                'destroy' => 'users.destroy',
+            ]);
+
+
+        //orders
+        Route::get('/orders', [AdminController::class, 'orders'])->name('orders.index');
+        Route::patch('/orders/{order}/status', [AdminController::class, 'updateOrderStatus'])->name('orders.updateStatus');
+
+        // Admin Completed & Cancelled Orders
+        Route::get('/orders/successful', [AdminController::class, 'successfulOrders'])->name('orders.successful');
+        Route::get('/orders/cancelled', [AdminController::class, 'cancelledOrders'])->name('orders.cancelled');
+        Route::get('/statistics', [AdminController::class, 'statistics'])->name('statistics');
+
+
+
         });
 
 

@@ -18,7 +18,7 @@
                             Order #{{ $order->id }} 
                         </h2>
                         <p class="text-sm text-gray-600">Placed on {{ $order->created_at->format('F j, Y') }}</p>
-                        <p class="text-sm text-gray-700 mt-1 font-medium">Total: ${{ number_format($order->total, 2) }}</p>
+                        <p class="text-sm text-gray-700 mt-1 font-medium">Total: LKR{{ number_format($order->total, 2) }}</p>
                     </div>
 
                     {{-- Order Items --}}
@@ -37,7 +37,7 @@
                                     <p class="text-sm text-gray-600">Size: {{ $item->size ?? '-' }}</p>
                                     <p class="text-sm text-gray-600">Variant: {{ $item->variant ?? '-' }}</p>
                                     <p class="text-sm text-gray-700 mt-1">
-                                        {{ $item->quantity }} × ${{ number_format($item->price, 2) }}
+                                        {{ $item->quantity }} × LKR{{ number_format($item->price, 2) }}
                                     </p>
                                 </div>
                             </div>

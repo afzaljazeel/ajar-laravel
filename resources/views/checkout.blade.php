@@ -43,7 +43,7 @@
 
         {{-- Total Summary --}}
         <div class="text-right text-lg font-semibold text-gray-800 border-t pt-4">
-            Total Payable: ${{ number_format($total, 2) }}
+            Total Payable: LKR {{ number_format($total, 2) }}
         </div>
 
         <button type="submit"

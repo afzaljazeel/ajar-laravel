@@ -27,21 +27,31 @@
                 Home
             </a>
 
+            <a href="{{ route('orders') }}"
+               class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition {{ request()->routeIs('orders') ? 'bg-gray-200 font-semibold' : '' }}">
+                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17h6m-6 0a3 3 0 11-6 0m6 0a3 3 0 006 0m6-2v-5a2 2 0 00-2-2h-3V6a2 2 0 00-2-2H5a2 2 0 00-2 2v11h2m16 0a3 3 0 11-6 0" />
+                </svg>
+                To Receive
+            </a>
+
+
             <a href="{{ route('orders.completed') }}"
             class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition {{ request()->routeIs('orders.completed') ? 'bg-gray-200 font-semibold' : '' }}">
-                <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M5 13l4 4L19 7" />
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2l4-4m5 2a9 9 0 11-18 0a9 9 0 0118 0z" />
                 </svg>
                 Completed Orders
             </a>
 
-            <a href="{{ route('orders') }}"
+
+            <a href="{{ route('orders.cancelled') }}"
                class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition {{ request()->routeIs('orders') ? 'bg-gray-200 font-semibold' : '' }}">
-                <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24">
-                    <path d="M9 17v-2a4 4 0 118 0v2M9 4a4 4 0 110 8 4 4 0 010-8zM17 4a4 4 0 110 8 4 4 0 010-8z" />
+                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v.01M12 15h.01M21 12a9 9 0 11-18 0a9 9 0 0118 0zm-6.5-2.5L10.5 14.5M14.5 14.5L10.5 9.5" />
                 </svg>
-                To Receive
+
+                Cancelled
             </a>
 
             <form method="POST" action="{{ route('logout') }}">

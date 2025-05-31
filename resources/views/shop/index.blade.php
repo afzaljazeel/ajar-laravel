@@ -61,11 +61,11 @@
                                 @if ($product->sale_price)
                                     <p class="text-gray-900 font-bold mt-2">
                                         <span class="line-through text-gray-400 mr-2">${{ number_format($product->price, 2) }}</span>
-                                        ${{ number_format($product->sale_price, 2) }}
+                                        LKR {{ number_format($product->sale_price, 2) }}
                                     </p>
                                 @else
                                     <p class="text-gray-900 font-bold mt-2">
-                                        ${{ number_format($product->price, 2) }}
+                                        LKR {{ number_format($product->price, 2) }}
                                     </p>
                                 @endif
                                 <a href="{{ route('product.show', $product->id) }}"

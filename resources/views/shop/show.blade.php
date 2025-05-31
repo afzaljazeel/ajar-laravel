@@ -43,10 +43,10 @@
         {{-- Price --}}
         <div>
             @if ($product->sale_price)
-                <span class="text-xl font-semibold text-red-600">${{ number_format($product->sale_price, 2) }}</span>
-                <span class="line-through text-gray-400 ml-2">${{ number_format($product->price, 2) }}</span>
+                <span class="text-xl font-semibold text-red-600">LKR {{ number_format($product->sale_price, 2) }}</span>
+                <span class="line-through text-gray-400 ml-2">LKR {{ number_format($product->price, 2) }}</span>
             @else
-                <span class="text-xl font-semibold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                <span class="text-xl font-semibold text-gray-900">LKR {{ number_format($product->price, 2) }}</span>
             @endif
         </div>
 
@@ -132,7 +132,7 @@
                              class="w-full h-full object-cover group-hover:scale-105 transition">
                     </div>
                     <h3 class="mt-2 text-sm text-gray-700 truncate">{{ $related->name }}</h3>
-                    <p class="text-sm font-semibold text-gray-900">${{ number_format($related->sale_price ?? $related->price, 2) }}</p>
+                    <p class="text-sm font-semibold text-gray-900">LKR {{ number_format($related->sale_price ?? $related->price, 2) }}</p>
                 </a>
             @endforeach
         </div>

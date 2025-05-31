@@ -41,21 +41,37 @@
                     Users
                 </a>
 
-                <a href="#" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
+                <a href="{{ route('admin.statistics') }}" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
                     <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M9 17v-2a4 4 0 118 0v2m-6 4h4" />
                     </svg>
                     Statistics
                 </a>
 
-                <a href="#" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
+                <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
+                    {{-- Clipboard List Icon for Orders --}}
                     <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M5 13l4 4L19 7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5h6M9 8h6M9 11h6M4 6h16v12H4z" />
                     </svg>
                     Orders
                 </a>
-            </nav>
-        </div>
+
+                <a href="{{ route('admin.orders.successful') }}" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
+                    {{-- Check Circle Icon for Completed Orders --}}
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2l4-4M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10s-4.48 10-10 10z" />
+                    </svg>
+                    Completed Orders
+                </a>
+
+                <a href="{{ route('admin.orders.cancelled') }}" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition">
+                    {{-- X Circle Icon for Cancelled Orders --}}
+                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6m0-6l6 6M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10s-4.48 10-10 10z" />
+                    </svg>
+                    Cancelled Orders
+                </a>
+
 
         <div class="px-4 py-4 border-t space-y-2">
             <a href="{{ route('home') }}" class="flex items-center justify-between text-sm text-gray-800 hover:text-blue-600">
@@ -91,19 +107,12 @@
         <h2 class="text-lg font-semibold text-gray-900">Admin Panel</h2>
 
         <div class="flex items-center gap-4">
-            {{-- Theme Toggle Placeholder (optional JS later) --}}
-            <button class="text-gray-500 hover:text-gray-700 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 3v1m0 16v1m9-9h1M3 12H2m15.36 6.36l-.707-.707M6.34 6.34l-.707-.707m12.02 0l-.707.707M6.34 17.66l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z"/>
-                </svg>
-            </button>
+            
 
             {{-- Profile Dropdown --}}
             <div class="relative">
                 <button onclick="document.getElementById('profileDropdown').classList.toggle('hidden')"
-                        class="flex items-center gap-2 hover:text-blue-600 text-gray-700 transition">
+                        class="flex items-center gap-2 hover:text-gray-400 text-gray-700 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"

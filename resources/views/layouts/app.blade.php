@@ -14,9 +14,9 @@
 
                 {{-- Left Nav --}}
                 <div class="flex items-center gap-6 text-sm font-medium">
-                    <a href="{{ route('shop') }}" class="hover:text-blue-600">Shop</a>
-                    <a href="{{ url('/shop?category=shoes') }}" class="hover:text-blue-600">Shoes</a>
-                    <a href="{{ url('/shop?category=perfumes') }}" class="hover:text-blue-600">Perfumes</a>
+                    <a href="{{ route('shop') }}" class="hover:text-gray-400">Shop</a>
+                    <a href="{{ url('/shop?category=shoes') }}" class="hover:text-gray-400">Shoes</a>
+                    <a href="{{ url('/shop?category=perfumes') }}" class="hover:text-gray-400">Perfumes</a>
                 </div>
 
                 {{-- Center Logo --}}
@@ -28,12 +28,16 @@
 
                 {{-- Right Nav --}}
                 <div class="flex items-center gap-6 text-sm font-medium">
-                    <a href="{{ route('wishlist') }}" class="hover:text-blue-600">Wishlist</a>
-                    <a href="{{ route('cart') }}" class="hover:text-blue-600">Cart</a>
+                    <a href="{{ route('wishlist') }}" class="hover:text-gray-400">Wishlist</a>
+                    <a href="{{ route('cart') }}" class="hover:text-gray-400">Cart</a>
                     @auth
-                        <a href="{{ route('profile') }}" class="hover:text-blue-600">Profile</a>
+                        @if (auth()->user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="hover:text-gray-400">Dashboard</a>
+                        @else
+                            <a href="{{ route('profile') }}" class="hover:text-gray-400">Profile</a>
+                        @endif
                     @else
-                        <a href="{{ route('login') }}" class="hover:text-blue-600">Sign In</a>
+                        <a href="{{ route('login') }}" class="hover:text-gray-400">Sign In</a>
                     @endauth
                 </div>
             </div>

@@ -1,36 +1,38 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+@extends('layouts.guest')
 
-        <x-validation-errors class="mb-4" />
+@section('title', 'Reset Password')
 
-        <form method="POST" action="{{ route('password.update') }}">
+@section('content')
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div class="w-full max-w-md bg-white rounded shadow p-6 space-y-6">
+        <h2 class="text-2xl font-bold text-gray-800 text-center">Set a New Password</h2>
+
+        @if ($errors->any())
+            <div class="text-red-600 text-sm">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
             @csrf
-
             <input type="hidden" name="token" value="{{ $request->route('token') }}">
+            <input type="hidden" name="email" value="{{ $request->email }}">
 
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            </div>
+            <input type="password" name="password" placeholder="New Password"
+                class="w-full border rounded px-4 py-2" required>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
+            <input type="password" name="password_confirmation" placeholder="Confirm Password"
+                class="w-full border rounded px-4 py-2" required>
 
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
+            <button type="submit"
+                class="w-full bg-gray-900 text-white py-2 rounded hover:bg-black transition">
+                Reset Password
+            </button>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </div>
+</div>
+@endsection

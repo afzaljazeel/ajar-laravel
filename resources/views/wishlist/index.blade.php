@@ -24,17 +24,17 @@
 
                         <p class="text-gray-600 text-sm mt-1">
                             @if ($item->sale_price)
-                                <span class="line-through mr-1">${{ number_format($item->price, 2) }}</span>
-                                <span class="text-red-600 font-semibold">${{ number_format($item->sale_price, 2) }}</span>
+                                <span class="line-through mr-1">LKR{{ number_format($item->price, 2) }}</span>
+                                <span class="text-red-600 font-semibold">LKR{{ number_format($item->sale_price, 2) }}</span>
                             @else
-                                ${{ number_format($item->price, 2) }}
+                                LKR {{ number_format($item->price, 2) }}
                             @endif
                         </p>
 
                         <form method="POST" action="{{ route('wishlist.toggle', $item->id) }}" class="mt-4">
                             @csrf
                             <button class="w-full px-4 py-2 text-sm text-gray-700 border rounded hover:bg-gray-100 transition">
-                                ❌ Remove from Wishlist
+                                 Remove from Wishlist
                             </button>
                         </form>
                     </div>

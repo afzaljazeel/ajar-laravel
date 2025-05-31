@@ -29,10 +29,10 @@
             <tr class="border-b hover:bg-gray-50">
                 {{-- Image Preview --}}
                 <td class="px-6 py-4">
-                    @if ($product->images->first())
-                        <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                            class="h-16 w-16 object-cover rounded border" alt="{{ $product->name }}">
-                    @else
+                        @if ($product->coverImage || $product->images->first())
+                            <img src="{{ asset('storage/' . ($product->coverImage->image_path ?? $product->images->first()->image_path)) }}"
+                                class="h-16 w-16 object-cover rounded border" alt="{{ $product->name }}">
+                        @else
                         <div class="h-16 w-16 flex items-center justify-center bg-gray-100 text-gray-400 rounded border">
                             No Image
                         </div>
@@ -46,12 +46,12 @@
                 <td class="px-6 py-4 text-gray-600">{{ $product->category->name ?? '-' }}</td>
 
                 {{-- Price --}}
-                <td class="px-6 py-4">${{ number_format($product->price, 2) }}</td>
+                <td class="px-6 py-4">LKR {{ number_format($product->price, 2) }}</td>
 
                 {{-- Sale Price --}}
                 <td class="px-6 py-4">
                     @if ($product->sale_price)
-                        ${{ number_format($product->sale_price, 2) }}
+                        LKR {{ number_format($product->sale_price, 2) }}
                     @else
                         <span class="text-gray-400">—</span>
                     @endif
