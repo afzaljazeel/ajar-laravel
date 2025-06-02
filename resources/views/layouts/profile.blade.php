@@ -46,7 +46,7 @@
 
 
             <a href="{{ route('orders.cancelled') }}"
-               class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition {{ request()->routeIs('orders') ? 'bg-gray-200 font-semibold' : '' }}">
+               class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-100 transition {{ request()->routeIs('orders.cancelled') ? 'bg-gray-200 font-semibold' : '' }}">
                 <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v.01M12 15h.01M21 12a9 9 0 11-18 0a9 9 0 0118 0zm-6.5-2.5L10.5 14.5M14.5 14.5L10.5 9.5" />
                 </svg>

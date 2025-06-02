@@ -86,23 +86,38 @@
                 @endif
 
         
-         {{-- Wishlist Favorite Button --}}
-        @php
-            $isFavorited = auth()->user()->wishlist->contains($product->id);
-        @endphp
+      {{-- Wishlist Favorite Button --}}
+            @auth
+                @php
+                    $isFavorited = auth()->user()->wishlist->contains($product->id);
+                @endphp
 
-        <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
-            @csrf
-            <button type="submit"
-                    class="w-12 h-10 border rounded flex items-center justify-center ml-2 transition hover:bg-gray-100">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $isFavorited ? 'red' : 'none' }}"
-                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                    class="w-6 h-6 {{ $isFavorited ? 'text-red-600' : 'text-gray-500' }}">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21.752 6.707c0 4.266-6.285 8.584-9.064 10.648a1.13 1.13 0 01-1.376 0C8.285 15.291 2 10.973 2 6.707 2 4.237 4.19 2 6.64 2c1.586 0 3.018.861 3.86 2.17A4.28 4.28 0 0114.36 2c2.45 0 4.64 2.237 4.64 4.707z" />
-                </svg>
-            </button>
-        </form>
+                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                            class="w-12 h-10 border rounded flex items-center justify-center ml-2 transition hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="{{ $isFavorited ? 'red' : 'none' }}"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="w-6 h-6 {{ $isFavorited ? 'text-red-600' : 'text-gray-500' }}">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21.752 6.707c0 4.266-6.285 8.584-9.064 10.648a1.13 1.13 0 01-1.376 0C8.285 15.291 2 10.973 2 6.707 2 4.237 4.19 2 6.64 2c1.586 0 3.018.861 3.86 2.17A4.28 4.28 0 0114.36 2c2.45 0 4.64 2.237 4.64 4.707z" />
+                        </svg>
+                    </button>
+                </form>
+            @else
+                {{-- Optional: show a tooltip, icon, or redirect to login --}}
+                <a href="{{ route('login') }}"
+                class="w-12 h-10 border rounded flex items-center justify-center ml-2 transition hover:bg-gray-100"
+                title="Login to add to wishlist">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="w-6 h-6 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21.752 6.707c0 4.266-6.285 8.584-9.064 10.648a1.13 1.13 0 01-1.376 0C8.285 15.291 2 10.973 2 6.707 2 4.237 4.19 2 6.64 2c1.586 0 3.018.861 3.86 2.17A4.28 4.28 0 0114.36 2c2.45 0 4.64 2.237 4.64 4.707z" />
+                    </svg>
+                </a>
+            @endauth
+
 
                 {{-- Add to Cart --}}
         <form action="{{ route('cart.add', $product->id) }}" method="POST" onsubmit="return validateCartSelection()" class="flex-1">

@@ -16,6 +16,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Api\APIProductController; // API ProductController
+
 
 
     // ----------------------
@@ -69,6 +71,11 @@ use App\Http\Controllers\ProfileController;
 
 
 
+
+    // API Routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/products', [APIProductController::class, 'index']);
+    });
 
 
 

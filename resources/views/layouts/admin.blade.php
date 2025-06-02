@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="{{ asset('faviconv2.png') }}"> 
     <meta charset="UTF-8">
     <title>@yield('title', 'Admin Dashboard')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
